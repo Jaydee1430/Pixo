@@ -1,36 +1,22 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pixo
 
-## Getting Started
+Professional image editing, right in your browser — fast, private, and easy to use.
 
-First, run the development server:
+Pixo is a browser-first image editor built with Next.js and TypeScript. It provides familiar editing tools (crop, resize, background removal, retouching, filters, export) that run entirely in the client — no uploads required, so your images stay on your machine.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Private-by-design: all editing runs in the browser; no images are uploaded by default.
+- Background removal & replacement
+- Object removal / inpainting
+- Adjustments: brightness, contrast, saturation, temperature
+- Presets and filters (mono, warm, vintage, vivid)
+- Export to PNG, JPG, WebP at configurable quality
+- Small, responsive UI built with Tailwind CSS
+- Lightweight state using Zustand
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Stack
+- Language: TypeScript (Next.js app router)
+- Framework / Runtime: Next.js (v16) + React (v19)
+- Notable libraries: Zustand (state), Tailwind CSS, Next.js image/font optimization
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

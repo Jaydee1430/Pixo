@@ -1,0 +1,303 @@
+@import "tailwindcss";
+
+/* ── Pixo design tokens (from the approved design) ───────────────────── */
+:root {
+  --accent: #4c8dff; /* themeable: electric blue (default), violet, teal */
+}
+
+@theme inline {
+  --color-bg: #08090c;
+  --color-canvas: #0b0d10;
+  --color-surface: #15181d;
+  --color-surface2: #1c2026;
+  --color-surface3: #232830;
+  --color-border: #2a2f37;
+  --color-border2: #343b45;
+  --color-accent: var(--accent);
+  --color-text: #f2f4f7;
+  --color-textbright: #e8eaee;
+  --color-text2: #8b93a1;
+  --color-textlabel: #b6bdc9;
+  --color-textmuted: #4a515c;
+  --color-success: #3ecf8e;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #08090c;
+  color: #e8eaee;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(76, 141, 255, 0.35);
+  color: #f2f4f7;
+}
+
+/* Gradient headline for hero text */
+.text-gradient {
+  background: linear-gradient(180deg, #ffffff 0%, #dbe6ff 55%, #94b8ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Soft accent glow (hero, CTA) */
+.glow-accent {
+  box-shadow:
+    0 0 0 1px rgba(76, 141, 255, 0.15),
+    0 8px 30px rgba(76, 141, 255, 0.35);
+}
+
+/* Subtle dot grid used behind the hero */
+.dot-grid {
+  background-image: radial-gradient(rgba(139, 147, 161, 0.14) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 30%, transparent 75%);
+}
+
+/* Transparency checkerboard used behind images */
+.checkerboard {
+  background-image: repeating-conic-gradient(#14171c 0% 25%, #0e1014 0% 50%);
+  background-size: 20px 20px;
+}
+
+/* Thin dark scrollbars for panels */
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #343b45 transparent;
+}
+.scroll-thin::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: #2a2f37;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.scroll-thin::-webkit-scrollbar-thumb:hover {
+  background: #343b45;
+  background-clip: padding-box;
+}
+
+/* Range slider styling (matches the mockup) */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 16px;
+  background: transparent;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+}
+input[type="range"]::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #e8eaee;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  margin-top: -5px;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #e8eaee;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  background: #ffffff;
+}
+input[type="range"]:focus {
+  outline: none;
+}
+input[type="range"]:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px rgba(76, 141, 255, 0.35);
+}
+
+@keyframes pixospin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-pixospin {
+  animation: pixospin 0.8s linear infinite;
+}
+
+@keyframes pixofade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-pixofade {
+  animation: pixofade 0.18s ease-out;
+}
+
+@keyframes pixopulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+.animate-pixopulse {
+  animation: pixopulse 2.2s ease-in-out infinite;
+}
+
+/* ── Entrance animations ─────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.animate-fadeup {
+  animation: fadeUp 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+/* Scroll reveal (toggled by the <Reveal> client component) */
+.reveal {
+  opacity: 0;
+}
+.reveal.is-visible {
+  animation: fadeUp 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.reveal-stagger > * {
+  opacity: 0;
+}
+.reveal-stagger.is-visible > * {
+  animation: fadeUp 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.reveal-stagger.is-visible > *:nth-child(1) { animation-delay: 0s; }
+.reveal-stagger.is-visible > *:nth-child(2) { animation-delay: 0.06s; }
+.reveal-stagger.is-visible > *:nth-child(3) { animation-delay: 0.12s; }
+.reveal-stagger.is-visible > *:nth-child(4) { animation-delay: 0.18s; }
+.reveal-stagger.is-visible > *:nth-child(5) { animation-delay: 0.24s; }
+.reveal-stagger.is-visible > *:nth-child(6) { animation-delay: 0.3s; }
+.reveal-stagger.is-visible > *:nth-child(7) { animation-delay: 0.36s; }
+.reveal-stagger.is-visible > *:nth-child(8) { animation-delay: 0.42s; }
+.reveal-stagger.is-visible > *:nth-child(9) { animation-delay: 0.48s; }
+.reveal-stagger.is-visible > *:nth-child(10) { animation-delay: 0.54s; }
+
+/* ── Animated aurora background (hero + CTA) ─────────────────────────── */
+.aurora-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  opacity: 0.5;
+  will-change: transform;
+}
+.aurora-a {
+  width: 520px;
+  height: 520px;
+  left: 18%;
+  top: -200px;
+  background: radial-gradient(closest-side, rgba(76, 141, 255, 0.55), transparent);
+  animation: driftA 16s ease-in-out infinite alternate;
+}
+.aurora-b {
+  width: 460px;
+  height: 460px;
+  left: 52%;
+  top: -240px;
+  background: radial-gradient(closest-side, rgba(139, 124, 255, 0.45), transparent);
+  animation: driftB 21s ease-in-out infinite alternate;
+}
+.aurora-c {
+  width: 400px;
+  height: 400px;
+  left: 34%;
+  top: -60px;
+  background: radial-gradient(closest-side, rgba(43, 217, 200, 0.3), transparent);
+  animation: driftC 26s ease-in-out infinite alternate;
+}
+@keyframes driftA {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(90px, 50px) scale(1.15); }
+}
+@keyframes driftB {
+  from { transform: translate(0, 0) scale(1.05); }
+  to { transform: translate(-90px, 30px) scale(0.95); }
+}
+@keyframes driftC {
+  from { transform: translate(0, 0); }
+  to { transform: translate(50px, -30px) scale(1.12); }
+}
+
+@keyframes floaty {
+  from { transform: translateY(0); }
+  to { transform: translateY(-14px); }
+}
+.anim-floaty {
+  animation: floaty 7s ease-in-out infinite alternate;
+}
+
+@keyframes ctaGlow {
+  from { transform: translate(-50%, 0) scale(1); }
+  to { transform: translate(-50%, -14px) scale(1.08); }
+}
+.anim-ctaglow {
+  animation: ctaGlow 8s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fadeup,
+  .reveal.is-visible,
+  .reveal-stagger.is-visible > * {
+    animation: none !important;
+  }
+  .reveal,
+  .reveal-stagger > * {
+    opacity: 1 !important;
+  }
+  .aurora-a,
+  .aurora-b,
+  .aurora-c,
+  .anim-floaty,
+  .anim-ctaglow,
+  .animate-pixopulse {
+    animation: none !important;
+  }
+}

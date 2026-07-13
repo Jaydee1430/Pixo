@@ -2,54 +2,25 @@ import Link from "next/link";
 import Image from "next/image";
 import { TOOLS } from "@/lib/tools";
 import { Icon } from "@/components/ui/Icon";
+import MobileNav from "@/components/ui/MobileNav";
 import { Reveal } from "@/components/ui/Reveal";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-dvh bg-canvas text-textbright">
+    <div className="min-h-screen bg-canvas text-textbright">
       {/* ── Nav ─────────────────────────────────────────────── */}
-      <header className="sticky top-0 z-30 border-b border-[#1c2026] bg-canvas/90 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-6xl items-center gap-8 px-6">
-          <Link href="/" className="flex items-center gap-2">
-            <Image
-              src="/pixo-logo.png"
-              alt="Pixo logo"
-              width={30}
-              height={30}
-              priority
-              className="h-[30px] w-[30px] object-contain"
-            />
-            <span className="text-[17px] font-bold tracking-tight text-text">Pixo</span>
-          </Link>
-          <nav className="hidden flex-1 items-center justify-center gap-7 sm:flex">
-            <a href="#features" className="text-[13px] font-medium text-textlabel transition hover:text-text">
-              Features
-            </a>
-            <a href="#how" className="text-[13px] font-medium text-textlabel transition hover:text-text">
-              How it works
-            </a>
-          </nav>
-          <div className="flex flex-1 justify-end sm:flex-none">
-            <Link
-              href="/editor"
-              className="inline-flex h-[34px] items-center rounded-md bg-accent px-4 text-[13px] font-semibold text-canvas transition hover:brightness-110"
-            >
-              Open editor
-            </Link>
-          </div>
-        </div>
-      </header>
+      <MobileNav />
 
       {/* ── Hero ────────────────────────────────────────────── */}
       <section className="relative overflow-hidden">
         {/* animated aurora + dot grid */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[620px] overflow-hidden">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-[620px] overflow-hidden hidden sm:block">
           <div className="dot-grid absolute inset-0" />
           <span className="aurora-blob aurora-a" />
           <span className="aurora-blob aurora-b" />
           <span className="aurora-blob aurora-c" />
         </div>
-        <div className="relative mx-auto flex max-w-6xl flex-col items-center px-6 pb-20 pt-20 text-center sm:pb-28 sm:pt-24">
+        <div className="relative mx-auto flex max-w-6xl flex-col items-center px-4 pb-16 pt-16 text-center sm:px-6 sm:pb-28 sm:pt-24">
           <span
             className="animate-fadeup flex items-center gap-2 rounded-full border border-accent/25 bg-accent/[0.08] px-3.5 py-1.5 text-xs font-medium text-accent backdrop-blur"
             style={{ animationDelay: "0ms" }}
@@ -58,7 +29,7 @@ export default function LandingPage() {
             Now in your browser — nothing to install
           </span>
           <h1
-            className="animate-fadeup mt-6 max-w-[820px] text-balance text-4xl font-bold leading-[1.08] tracking-tight sm:text-[60px]"
+            className="animate-fadeup mt-6 max-w-[820px] text-balance text-[2rem] font-bold leading-[1.08] tracking-tight sm:text-[60px]"
             style={{ animationDelay: "70ms" }}
           >
             <span className="text-gradient">Professional image editing,</span>
@@ -102,7 +73,7 @@ export default function LandingPage() {
             style={{ animationDelay: "360ms" }}
           >
             <div
-              className="anim-floaty pointer-events-none absolute -inset-x-10 -top-8 bottom-0 rounded-[40px] opacity-50 blur-3xl"
+              className="anim-floaty pointer-events-none absolute inset-x-0 sm:-inset-x-10 -top-8 bottom-0 rounded-[40px] opacity-50 blur-3xl"
               style={{ background: "radial-gradient(closest-side, rgba(76,141,255,0.28), transparent)" }}
             />
             <div className="relative w-full overflow-hidden rounded-xl border border-border shadow-[0_-1px_0_rgba(255,255,255,0.04),0_24px_80px_rgba(0,0,0,0.6)]">
@@ -113,7 +84,7 @@ export default function LandingPage() {
               <span className="h-2.5 w-2.5 rounded-full bg-border" />
               <span className="h-2.5 w-2.5 rounded-full bg-border" />
             </div>
-            <span className="text-xs font-medium text-text2">summer-shoot-04.jpg — Pixo</span>
+            <span className="min-w-0 flex-1 truncate text-xs font-medium text-text2">summer-shoot-04.jpg — Pixo</span>
             <div className="ml-auto hidden items-center gap-1.5 sm:flex">
               <span className="h-4 w-7 rounded bg-surface2" />
               <span className="h-4 w-10 rounded bg-surface2" />
@@ -122,9 +93,9 @@ export default function LandingPage() {
           </div>
 
           {/* body */}
-          <div className="flex h-[280px] bg-canvas sm:h-[380px]">
+          <div className="flex h-auto flex-col bg-canvas sm:h-[380px] sm:flex-row">
             {/* tool rail */}
-            <div className="flex w-12 flex-none flex-col items-center gap-1 border-r border-border bg-surface py-3">
+            <div className="flex h-11 w-full flex-none flex-row items-center justify-center gap-1 border-b border-border bg-surface py-1.5 sm:h-auto sm:w-12 sm:flex-col sm:justify-start sm:border-b-0 sm:border-r sm:py-3">
               {(
                 [
                   ["select", false],
@@ -148,12 +119,12 @@ export default function LandingPage() {
             </div>
 
             {/* canvas */}
-            <div className="relative flex flex-1 items-center justify-center">
+            <div className="relative flex min-h-[180px] flex-1 items-center justify-center sm:min-h-0">
               <div
                 className="checkerboard absolute inset-0 opacity-40"
                 style={{ backgroundSize: "16px 16px" }}
               />
-              <div className="relative h-[62%] w-[66%]">
+              <div className="relative h-auto w-full sm:h-[62%] sm:w-[66%]">
                 <div
                   className="h-full w-full rounded-[2px] shadow-[0_10px_30px_rgba(0,0,0,0.55)]"
                   style={{
@@ -236,7 +207,7 @@ export default function LandingPage() {
 
       {/* ── Tools grid ──────────────────────────────────────── */}
       <section id="features" className="border-t border-[#1c2026]">
-        <div className="mx-auto max-w-6xl px-6 py-16 sm:py-[72px]">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-[72px]">
           <Reveal className="reveal max-w-[560px]">
             <h2 className="text-[26px] font-bold leading-tight tracking-tight text-text sm:text-[32px]">
               Every tool you reach for daily
@@ -264,7 +235,7 @@ export default function LandingPage() {
 
       {/* ── How it works ────────────────────────────────────── */}
       <section id="how" className="border-t border-[#1c2026]">
-        <div className="mx-auto max-w-6xl px-6 py-16 sm:py-[72px]">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-[72px]">
           <Reveal className="reveal">
             <h2 className="text-[26px] font-bold leading-tight tracking-tight text-text sm:text-[32px]">
               Private by design
@@ -306,10 +277,10 @@ export default function LandingPage() {
       {/* ── CTA footer ──────────────────────────────────────── */}
       <section className="relative overflow-hidden border-t border-[#1c2026]">
         <div
-          className="anim-ctaglow pointer-events-none absolute left-1/2 bottom-[-220px] h-[420px] w-[760px] -translate-x-1/2 rounded-full opacity-50 blur-[110px]"
+          className="anim-ctaglow pointer-events-none hidden sm:block absolute left-1/2 bottom-[-220px] h-[420px] w-[760px] -translate-x-1/2 rounded-full opacity-50 blur-[110px]"
           style={{ background: "radial-gradient(closest-side, rgba(76,141,255,0.32), transparent)" }}
         />
-        <Reveal className="reveal relative mx-auto flex max-w-6xl flex-col items-center px-6 pb-14 pt-16 text-center sm:pt-[72px]">
+        <Reveal className="reveal relative mx-auto flex max-w-6xl flex-col items-center px-4 pb-12 pt-14 text-center sm:px-6 sm:pb-14 sm:pt-[72px]">
           <h2 className="text-gradient text-[28px] font-bold leading-tight tracking-tight sm:text-[34px]">
             Open an image. Ship it in minutes.
           </h2>

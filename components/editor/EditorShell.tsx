@@ -38,6 +38,7 @@ export function EditorShell() {
   const [bgTolerance, setBgTolerance] = useState(36);
   const [bgFeather, setBgFeather] = useState(1);
   const [bgWhole, setBgWhole] = useState(false);
+  const [mobilePanelOpen, setMobilePanelOpen] = useState(true);
 
   useEffect(() => {
     if (!maskRef.current) maskRef.current = document.createElement("canvas");
@@ -94,6 +95,14 @@ export function EditorShell() {
   }, [clearMask]);
 
   useEffect(() => {
+    return useEditor.subscribe((s, prev) => {
+      if (s.activeTool !== prev.activeTool && s.activeTool !== "select") {
+        setMobilePanelOpen(true);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement | null;
       if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
@@ -145,6 +154,8 @@ export function EditorShell() {
       setBgFeather,
       bgWhole,
       setBgWhole,
+      mobilePanelOpen,
+      setMobilePanelOpen,
     }),
     [
       openPicker,
@@ -161,6 +172,7 @@ export function EditorShell() {
       bgTolerance,
       bgFeather,
       bgWhole,
+      mobilePanelOpen,
     ],
   );
 
@@ -190,9 +202,11 @@ export function EditorShell() {
         }}
       >
         <TopBar />
-        <div className="flex min-h-0 flex-1">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden md:flex-row">
           <LeftToolRail />
-          <main className="relative min-w-0 flex-1">{hasImage ? <Canvas /> : <EmptyState />}</main>
+          <main className="relative order-1 min-h-0 min-w-0 flex-1 md:order-none">
+            {hasImage ? <Canvas /> : <EmptyState />}
+          </main>
           {hasImage && <RightPanel />}
         </div>
         <StatusBar />

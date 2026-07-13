@@ -25,7 +25,10 @@ export type IconName =
   | "move"
   | "shield"
   | "bolt"
-  | "check";
+  | "check"
+  | "menu"
+  | "x"
+  | "chevron-down";
 
 type Props = {
   name: IconName;
@@ -60,6 +63,9 @@ const VIEWBOX: Record<IconName, string> = {
   shield: "0 0 18 18",
   bolt: "0 0 18 18",
   check: "0 0 14 14",
+  menu: "0 0 18 18",
+  x: "0 0 16 16",
+  "chevron-down": "0 0 16 16",
 };
 
 export function Icon({ name, size = 18, className, ...rest }: Props) {
@@ -211,6 +217,17 @@ export function Icon({ name, size = 18, className, ...rest }: Props) {
         <path d="M10 1.5L3.5 10.5H8l-1 6 6.5-9H9l1-6z" {...stroke} />
       )}
       {name === "check" && <path d="M2.5 7.5l3 3 6-6.5" {...stroke} />}
+      {name === "menu" && (
+        <>
+          <path d="M3 5h12M3 9h12M3 13h12" {...stroke} />
+        </>
+      )}
+      {name === "x" && (
+        <>
+          <path d="M4 4l8 8M12 4l-8 8" {...stroke} />
+        </>
+      )}
+      {name === "chevron-down" && <path d="M4 6l4 4 4-4" {...stroke} />}
     </svg>
   );
 }

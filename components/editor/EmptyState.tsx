@@ -8,7 +8,7 @@ export function EmptyState() {
   const { openPicker, isDragging } = useEditorUI();
 
   return (
-    <div className="relative flex h-full w-full items-center justify-center p-12">
+    <div className="relative flex h-full w-full items-center justify-center p-4 sm:p-8 md:p-12">
       <div className="checkerboard absolute inset-0 opacity-35" />
       <button
         type="button"
@@ -32,7 +32,7 @@ export function EmptyState() {
           <Icon name="upload" size={26} />
         </span>
         <span className="flex flex-col items-center gap-1.5">
-          <span className="text-[17px] font-semibold text-text">
+          <span className="text-center text-[15px] font-semibold text-text sm:text-[17px]">
             {isDragging ? "Drop to open" : "Drag & drop an image to start"}
           </span>
           <span className="text-[13px] text-text2">or</span>

@@ -36,7 +36,8 @@ export function Canvas() {
   useEffect(() => {
     const el = containerRef.current;
     if (!el || !width || !height) return;
-    const pad = 80;
+    const mq = window.matchMedia("(min-width: 768px)");
+    const pad = mq.matches ? 80 : 24;
     const fit = Math.min((el.clientWidth - pad) / width, (el.clientHeight - pad) / height, 1);
     setZoom(Math.max(10, Math.round(fit * 100)));
     setPan({ x: 0, y: 0 });
@@ -131,7 +132,7 @@ export function Canvas() {
         </div>
       </div>
 
-      <div className="pointer-events-none absolute bottom-4 left-4 z-20 flex items-center gap-2 rounded-lg border border-border bg-surface/90 px-2.5 py-1.5 text-xs text-text2 backdrop-blur">
+      <div className="pointer-events-none absolute bottom-3 left-3 right-3 z-20 hidden items-center gap-2 rounded-lg border border-border bg-surface/90 px-2.5 py-1.5 text-xs text-text2 backdrop-blur sm:bottom-4 sm:left-4 sm:right-auto sm:flex">
         <span>Drag to pan · ⌘/Ctrl + scroll to zoom</span>
       </div>
     </div>

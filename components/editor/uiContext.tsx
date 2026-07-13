@@ -34,6 +34,9 @@ export interface EditorUI {
   setBgFeather: (n: number) => void;
   bgWhole: boolean;
   setBgWhole: (b: boolean) => void;
+
+  mobilePanelOpen: boolean;
+  setMobilePanelOpen: (open: boolean) => void;
 }
 
 export const EditorUIContext = createContext<EditorUI | null>(null);

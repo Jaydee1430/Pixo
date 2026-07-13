@@ -25,8 +25,8 @@ export function TopBar() {
   const setTool = useEditor((s) => s.setTool);
 
   return (
-    <header className="flex h-[52px] flex-none items-center gap-4 border-b border-border bg-surface px-4">
-      <Link href="/" className="flex w-[200px] flex-none items-center gap-2">
+    <header className="flex h-12 flex-none items-center gap-2 border-b border-border bg-surface px-3 sm:h-[52px] sm:gap-4 sm:px-4">
+      <Link href="/" className="flex flex-none items-center gap-2 sm:w-[200px]">
         <Image
           src="/pixo-logo.png"
           alt="Pixo logo"
@@ -34,10 +34,10 @@ export function TopBar() {
           height={28}
           className="h-7 w-7 object-contain"
         />
-        <span className="text-[16px] font-bold tracking-tight text-text">Pixo</span>
+        <span className="text-[15px] font-bold tracking-tight text-text sm:text-[16px]">Pixo</span>
       </Link>
 
-      <div className="flex min-w-0 flex-1 items-center justify-center gap-2.5">
+      <div className="hidden min-w-0 flex-1 items-center justify-center gap-2.5 md:flex">
         {hasImage ? (
           <>
             <span className="truncate text-[13px] font-medium text-textbright">{fileName}</span>
@@ -56,11 +56,11 @@ export function TopBar() {
         )}
       </div>
 
-      <div className="flex flex-none items-center gap-2">
+      <div className="ml-auto flex flex-none items-center gap-1 sm:gap-2">
         <IconBtn label="Undo (Ctrl+Z)" icon="undo" onClick={undo} disabled={!canUndo} />
         <IconBtn label="Redo (Ctrl+Shift+Z)" icon="redo" onClick={redo} disabled={!canRedo} />
-        <div className="h-5 w-px bg-border" />
-        <div className="flex items-center gap-0.5 rounded-md border border-border bg-surface2 p-0.5">
+        <div className="hidden h-5 w-px bg-border sm:block" />
+        <div className="hidden items-center gap-0.5 rounded-md border border-border bg-surface2 p-0.5 sm:flex">
           <button
             title="Zoom out"
             onClick={zoomOut}
@@ -81,18 +81,19 @@ export function TopBar() {
             <Icon name="plus" size={14} />
           </button>
         </div>
-        <div className="h-5 w-px bg-border" />
-        <Button variant="secondary" onClick={openPicker}>
+        <div className="hidden h-5 w-px bg-border sm:block" />
+        <Button variant="secondary" onClick={openPicker} className="px-2.5 sm:px-3.5">
           <Icon name="import" size={14} />
-          Import
+          <span className="hidden sm:inline">Import</span>
         </Button>
         <Button
           variant="primary"
           onClick={() => setTool("export")}
           disabled={!hasImage}
+          className="px-2.5 sm:px-3.5"
         >
           <Icon name="download" size={14} />
-          Export
+          <span className="hidden sm:inline">Export</span>
         </Button>
       </div>
     </header>

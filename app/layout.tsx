@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -12,6 +12,15 @@ export const metadata: Metadata = {
   title: "Pixo — Professional image editing in your browser",
   description:
     "Remove backgrounds, retouch, crop, and export in seconds. Pixo runs entirely in your browser — your images never leave your machine.",
+  appleWebApp: {
+    capable: true,
+    title: "Pixo",
+    statusBarStyle: "black-translucent",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#000000",
 };
 
 export default function RootLayout({

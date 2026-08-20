@@ -22,19 +22,26 @@ export function TopBar() {
   const redo = useEditor((s) => s.redo);
   const zoomIn = useEditor((s) => s.zoomIn);
   const zoomOut = useEditor((s) => s.zoomOut);
-  const setTool = useEditor((s) => s.setTool);
 
   return (
     <header className="flex h-12 flex-none items-center gap-2 border-b border-border bg-surface px-3 sm:h-[52px] sm:gap-4 sm:px-4">
-      <Link href="/" className="flex flex-none items-center gap-2 sm:w-[200px]">
+      <Link href="/" className="flex flex-none items-center gap-2.5 sm:w-[220px]">
         <Image
-          src="/pixo-logo.png"
+          src="/pixo-logo.png?v=2"
           alt="Pixo logo"
-          width={28}
-          height={28}
-          className="h-7 w-7 object-contain"
+          width={34}
+          height={34}
+          unoptimized
+          className="h-8 w-8 object-contain"
         />
-        <span className="text-[15px] font-bold tracking-tight text-text sm:text-[16px]">Pixo</span>
+        <Image
+          src="/pixo-text.png?v=2"
+          alt="Pixo"
+          width={85}
+          height={28}
+          unoptimized
+          className="h-[24px] w-auto object-contain"
+        />
       </Link>
 
       <div className="hidden min-w-0 flex-1 items-center justify-center gap-2.5 md:flex">
@@ -86,15 +93,7 @@ export function TopBar() {
           <Icon name="import" size={14} />
           <span className="hidden sm:inline">Import</span>
         </Button>
-        <Button
-          variant="primary"
-          onClick={() => setTool("export")}
-          disabled={!hasImage}
-          className="px-2.5 sm:px-3.5"
-        >
-          <Icon name="download" size={14} />
-          <span className="hidden sm:inline">Export</span>
-        </Button>
+
       </div>
     </header>
   );

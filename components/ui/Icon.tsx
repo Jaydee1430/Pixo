@@ -12,6 +12,14 @@ export type IconName =
   | "blurbg"
   | "filters"
   | "export"
+  | "compress"
+  | "watermark"
+  | "convert"
+  | "collage"
+  | "search"
+  | "star"
+  | "chevron-left"
+  | "chevron-right"
   | "undo"
   | "redo"
   | "plus"
@@ -49,6 +57,14 @@ const VIEWBOX: Record<IconName, string> = {
   blurbg: "0 0 18 18",
   filters: "0 0 18 18",
   export: "0 0 18 18",
+  compress: "0 0 18 18",
+  watermark: "0 0 18 18",
+  convert: "0 0 18 18",
+  collage: "0 0 18 18",
+  search: "0 0 16 16",
+  star: "0 0 16 16",
+  "chevron-left": "0 0 16 16",
+  "chevron-right": "0 0 16 16",
   undo: "0 0 16 16",
   redo: "0 0 16 16",
   plus: "0 0 16 16",
@@ -228,6 +244,46 @@ export function Icon({ name, size = 18, className, ...rest }: Props) {
         </>
       )}
       {name === "chevron-down" && <path d="M4 6l4 4 4-4" {...stroke} />}
+      {name === "chevron-left" && <path d="M10 4l-4 4 4 4" {...stroke} />}
+      {name === "chevron-right" && <path d="M6 4l4 4-4 4" {...stroke} />}
+      {name === "search" && (
+        <>
+          <circle cx="6.5" cy="6.5" r="4.5" {...stroke} />
+          <path d="M10 10l4.5 4.5" {...stroke} />
+        </>
+      )}
+      {name === "star" && (
+        <path
+          d="M8 1.5l2.06 4.17 4.6.67-3.33 3.25.79 4.58L8 12.01l-4.12 2.16.79-4.58L1.34 6.34l4.6-.67L8 1.5z"
+          fill="currentColor"
+          stroke="none"
+        />
+      )}
+      {name === "compress" && (
+        <>
+          <path d="M4 14l4-4M4 10h4v4M14 4l-4 4M14 8h-4V4" {...stroke} />
+        </>
+      )}
+      {name === "watermark" && (
+        <>
+          <rect x="2" y="2" width="14" height="14" rx="2" {...stroke} />
+          <path d="M5 13l3-3 2 2 3-3" {...stroke} />
+          <circle cx="6" cy="6" r="1.5" fill="currentColor" />
+        </>
+      )}
+      {name === "convert" && (
+        <>
+          <path d="M3 6h10l-3-3M15 12H5l3 3" {...stroke} />
+        </>
+      )}
+      {name === "collage" && (
+        <>
+          <rect x="2" y="2" width="6.5" height="6.5" rx="1.5" {...stroke} />
+          <rect x="9.5" y="2" width="6.5" height="6.5" rx="1.5" {...stroke} />
+          <rect x="2" y="9.5" width="6.5" height="6.5" rx="1.5" {...stroke} />
+          <rect x="9.5" y="9.5" width="6.5" height="6.5" rx="1.5" {...stroke} />
+        </>
+      )}
     </svg>
   );
 }

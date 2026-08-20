@@ -3,12 +3,28 @@ export type ToolId =
   | "crop"
   | "resize"
   | "bgremove"
-  | "bgreplace"
   | "adjust"
   | "object"
   | "enhance"
   | "filters"
-  | "export";
+  | "compress"
+  | "watermark"
+  | "convert"
+  | "jpg-to-png"
+  | "png-to-jpg"
+  | "webp-to-png"
+  | "png-to-webp"
+  | "svg-to-png"
+  | "svg-to-jpg"
+  | "pdf-to-word"
+  | "word-to-pdf"
+  | "txt-to-pdf"
+  | "txt-to-word"
+  | "markdown-to-html"
+  | "html-to-pdf"
+  | "json-to-csv"
+  | "csv-to-json"
+  | "collage";
 
 export interface Adjustments {
   brightness: number; // -100..100

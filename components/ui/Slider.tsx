@@ -30,17 +30,17 @@ export function Slider({
     ? (() => {
         const lo = Math.min(50, pct);
         const hi = Math.max(50, pct);
-        return `linear-gradient(to right, var(--color-border) ${lo}%, var(--accent) ${lo}%, var(--accent) ${hi}%, var(--color-border) ${hi}%)`;
+        return `linear-gradient(to right, #d4d4d4 ${lo}%, #171717 ${lo}%, #171717 ${hi}%, #d4d4d4 ${hi}%)`;
       })()
-    : `linear-gradient(to right, var(--accent) ${pct}%, var(--color-border) ${pct}%)`;
+    : `linear-gradient(to right, #171717 ${pct}%, #d4d4d4 ${pct}%)`;
 
   const shown = display ?? `${value > 0 && bidirectional ? "+" : ""}${value}${unit}`;
 
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <span className="text-[13px] font-medium text-textlabel">{label}</span>
-        <span className="min-w-[38px] rounded border border-border bg-surface2 px-1.5 py-0.5 text-center text-xs font-medium text-textbright tabular-nums">
+        <span className="text-[13px] font-medium text-[#404040]">{label}</span>
+        <span className="min-w-[38px] rounded border border-[#d4d4d4] bg-[#eeeeee] px-1.5 py-0.5 text-center text-xs font-medium text-[#171717] tabular-nums">
           {shown}
         </span>
       </div>
@@ -54,7 +54,7 @@ export function Slider({
         onPointerUp={() => onCommit?.()}
         onKeyUp={() => onCommit?.()}
         aria-label={label}
-        style={{ background: `${grad} center / 100% 4px no-repeat` }}
+        style={{ background: `${grad} center / 100% 6px no-repeat` }}
       />
     </div>
   );

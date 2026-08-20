@@ -8,7 +8,6 @@ import { cn } from "@/lib/cn";
 export function LeftToolRail() {
   const activeTool = useEditor((s) => s.activeTool);
   const setTool = useEditor((s) => s.setTool);
-  const hasImage = useEditor((s) => !!s.base);
 
   return (
     <nav
@@ -34,12 +33,10 @@ export function LeftToolRail() {
               <button
                 aria-label={tool.label}
                 aria-pressed={active}
-                disabled={!hasImage}
                 onClick={() => setTool(tool.id)}
                 className={cn(
                   "flex h-9 w-9 items-center justify-center rounded-lg border transition md:h-10 md:w-10",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70",
-                  "disabled:cursor-not-allowed disabled:opacity-40",
                   active
                     ? "border-accent bg-accent/15 text-accent shadow-[0_0_16px_rgba(76,141,255,0.25)]"
                     : "border-transparent text-text2 hover:bg-surface2 hover:text-textbright",
@@ -47,12 +44,9 @@ export function LeftToolRail() {
               >
                 <Icon name={tool.icon} size={17} />
               </button>
-              {hasImage && (
-                <div className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 hidden -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-md border border-border2 bg-surface3 px-2.5 py-1.5 text-xs font-medium text-textbright shadow-lg group-hover:flex md:left-12 md:top-1/2 md:mt-0 md:-translate-x-0 md:-translate-y-1/2">
-                  {tool.label}
-                  <span className="text-text2">{tool.key}</span>
-                </div>
-              )}
+              <div className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 hidden -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-md border border-border2 bg-surface3 px-2.5 py-1.5 text-xs font-medium text-textbright shadow-lg group-hover:flex md:left-12 md:top-1/2 md:mt-0 md:-translate-x-0 md:-translate-y-1/2">
+                {tool.label}
+              </div>
             </div>
           </div>
         );

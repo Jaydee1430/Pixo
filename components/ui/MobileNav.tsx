@@ -1,16 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { Icon } from "@/components/ui/Icon";
 
 export default function MobileNav() {
   const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     if (!open) return;
@@ -30,26 +26,34 @@ export default function MobileNav() {
     <div className="fixed inset-0 z-50 sm:hidden" role="dialog" aria-modal="true" aria-label="Navigation menu">
       <button
         type="button"
-        className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
+        className="absolute inset-0 bg-[#171717]/35 backdrop-blur-[2px]"
         onClick={() => setOpen(false)}
         aria-label="Close menu"
       />
 
-      <div className="absolute inset-y-0 right-0 flex w-[min(320px,88vw)] flex-col border-l border-border bg-canvas shadow-[-8px_0_32px_rgba(0,0,0,0.5)]">
-        <div className="flex h-14 flex-none items-center justify-between border-b border-border px-4">
-          <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
+      <div className="absolute inset-y-0 right-0 flex w-[min(320px,88vw)] flex-col border-l border-[#d4d4d4] bg-[#ffffff] shadow-[-8px_0_32px_rgba(0,0,0,0.18)]">
+        <div className="flex h-14 flex-none items-center justify-between border-b border-[#d4d4d4] px-4">
+          <Link href="/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
             <Image
-              src="/pixo-logo.png"
+              src="/pixo-logo.png?v=2"
               alt="Pixo logo"
-              width={28}
-              height={28}
-              className="h-7 w-7 object-contain"
+              width={34}
+              height={34}
+              unoptimized
+              className="h-8 w-8 object-contain grayscale"
             />
-            <span className="text-[16px] font-bold tracking-tight text-text">Pixo</span>
+            <Image
+              src="/pixo-text.png?v=2"
+              alt="Pixo"
+              width={85}
+              height={28}
+              unoptimized
+              className="h-6 w-auto object-contain grayscale"
+            />
           </Link>
           <button
             type="button"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-surface text-textlabel transition hover:bg-surface2 hover:text-textbright"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-[#d4d4d4] bg-[#fafafa] text-[#525252] transition hover:bg-[#eeeeee] hover:text-[#171717]"
             onClick={() => setOpen(false)}
             aria-label="Close menu"
           >
@@ -59,69 +63,78 @@ export default function MobileNav() {
 
         <nav className="flex flex-1 flex-col gap-1 overflow-y-auto p-4">
           <a
-            href="#features"
-            className="rounded-lg px-3 py-3 text-[15px] font-medium text-textlabel transition hover:bg-surface2 hover:text-textbright"
+            href="#tools"
+            className="rounded-md px-3 py-3 text-[15px] font-bold text-[#525252] transition hover:bg-[#eeeeee] hover:text-[#171717]"
             onClick={() => setOpen(false)}
           >
-            Features
+            Tools
           </a>
           <a
             href="#how"
-            className="rounded-lg px-3 py-3 text-[15px] font-medium text-textlabel transition hover:bg-surface2 hover:text-textbright"
+            className="rounded-md px-3 py-3 text-[15px] font-bold text-[#525252] transition hover:bg-[#eeeeee] hover:text-[#171717]"
             onClick={() => setOpen(false)}
           >
             How it works
           </a>
         </nav>
 
-        <div className="flex-none border-t border-border p-4">
-          <Link
-            href="/editor"
-            className="inline-flex h-11 w-full items-center justify-center rounded-lg bg-accent text-[15px] font-semibold text-canvas transition hover:brightness-110"
+        <div className="flex-none border-t border-[#d4d4d4] p-4">
+          <a
+            href="#tools"
+            className="inline-flex h-11 w-full items-center justify-center rounded-md bg-[#171717] text-[15px] font-black text-[#ffffff] transition hover:bg-[#262626]"
             onClick={() => setOpen(false)}
           >
-            Open editor
-          </Link>
+            Explore Tools
+          </a>
         </div>
       </div>
     </div>
   ) : null;
 
   return (
-    <header className="sticky top-0 z-30 border-b border-[#1c2026] bg-canvas/90 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-4 sm:h-16 sm:gap-8 sm:px-6">
-        <Link href="/" className="flex items-center gap-2">
+    <header className="sticky top-0 z-30 border-b border-[#d4d4d4] bg-[#ffffff]/90 backdrop-blur">
+      <div className="mx-auto flex h-14 max-w-[1320px] items-center gap-4 px-4 sm:h-16 sm:gap-8 sm:px-6">
+        <Link href="/" className="flex items-center gap-2.5">
           <Image
-            src="/pixo-logo.png"
+            src="/pixo-logo.png?v=2"
             alt="Pixo logo"
-            width={30}
-            height={30}
+            width={38}
+            height={38}
             priority
-            className="h-[30px] w-[30px] object-contain"
+            unoptimized
+            className="h-[38px] w-[38px] object-contain grayscale"
           />
-          <span className="text-[17px] font-bold tracking-tight text-text">Pixo</span>
+          <Image
+            src="/pixo-text.png?v=2"
+            alt="Pixo"
+            width={96}
+            height={32}
+            priority
+            unoptimized
+            className="h-[28px] w-auto object-contain grayscale"
+          />
         </Link>
 
         <nav className="hidden flex-1 items-center justify-center gap-7 sm:flex">
-          <a href="#features" className="text-[13px] font-medium text-textlabel transition hover:text-text">
-            Features
+          <a href="#tools" className="text-[13px] font-black text-[#525252] transition hover:text-[#171717]">
+            Tools
           </a>
-          <a href="#how" className="text-[13px] font-medium text-textlabel transition hover:text-text">
+          <a href="#how" className="text-[13px] font-black text-[#525252] transition hover:text-[#171717]">
             How it works
           </a>
         </nav>
 
         <div className="ml-auto flex items-center gap-2 sm:ml-0">
-          <Link
-            href="/editor"
-            className="hidden sm:inline-flex h-[34px] items-center rounded-md bg-accent px-4 text-[13px] font-semibold text-canvas transition hover:brightness-110"
+          <a
+            href="#tools"
+            className="hidden h-[34px] items-center rounded-md bg-[#171717] px-4 text-[13px] font-black text-[#ffffff] transition hover:bg-[#262626] sm:inline-flex"
           >
-            Open editor
-          </Link>
+            Explore Tools
+          </a>
 
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-border bg-surface sm:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-[#d4d4d4] bg-[#fafafa] text-[#171717] sm:hidden"
             onClick={() => setOpen(true)}
             aria-label="Open menu"
             aria-expanded={open}
@@ -131,7 +144,7 @@ export default function MobileNav() {
         </div>
       </div>
 
-      {mounted && menu ? createPortal(menu, document.body) : null}
+      {menu}
     </header>
   );
 }

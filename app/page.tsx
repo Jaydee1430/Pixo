@@ -1,301 +1,326 @@
-import Link from "next/link";
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { TOOLS } from "@/lib/tools";
-import { Icon } from "@/components/ui/Icon";
 import MobileNav from "@/components/ui/MobileNav";
+import { Icon } from "@/components/ui/Icon";
 import { Reveal } from "@/components/ui/Reveal";
+import { CATEGORIES, TOOLS, type ToolCategory, type ToolDef } from "@/lib/tools";
+import { ToolModal } from "@/components/hub/ToolModal";
+
+const QUICK_TOOL_IDS = ["bgremove", "resize", "jpg-to-png", "png-to-webp"] as const;
+
+function getToolTone(tool: ToolDef) {
+  if (tool.category === "File Converter") {
+    return {
+      card: "border-[#a3a3a3] bg-[#f5f5f5]",
+      icon: "border-[#737373] bg-[#d4d4d4] text-[#171717]",
+      tag: "bg-[#e5e5e5] text-[#404040]",
+    };
+  }
+
+  if (tool.version === 2) {
+    return {
+      card: "border-[#d4d4d4] bg-[#fafafa]",
+      icon: "border-[#a3a3a3] bg-[#e5e5e5] text-[#171717]",
+      tag: "bg-[#eeeeee] text-[#404040]",
+    };
+  }
+
+  return {
+    card: "border-[#d4d4d4] bg-[#ffffff]",
+    icon: "border-[#a3a3a3] bg-[#e5e5e5] text-[#171717]",
+    tag: "bg-[#eeeeee] text-[#404040]",
+  };
+}
 
 export default function LandingPage() {
+  const [selectedCategory, setSelectedCategory] = useState<ToolCategory>("All Tools");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTool, setActiveTool] = useState<ToolDef | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        document.getElementById("tool-search-input")?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  const categoryCounts = useMemo(() => {
+    return CATEGORIES.reduce<Record<ToolCategory, number>>((acc, category) => {
+      acc[category] =
+        category === "All Tools"
+          ? TOOLS.length
+          : category === "Popular"
+            ? TOOLS.filter((tool) => tool.isPopular).length
+            : TOOLS.filter((tool) => tool.category === category).length;
+      return acc;
+    }, {} as Record<ToolCategory, number>);
+  }, []);
+
+  const filteredTools = useMemo(() => {
+    return TOOLS.filter((tool) => {
+      if (selectedCategory === "Popular" && !tool.isPopular) return false;
+      if (
+        selectedCategory !== "All Tools" &&
+        selectedCategory !== "Popular" &&
+        tool.category !== selectedCategory
+      ) {
+        return false;
+      }
+
+      const q = searchQuery.trim().toLowerCase();
+      if (!q) return true;
+      return (
+        tool.label.toLowerCase().includes(q) ||
+        tool.blurb.toLowerCase().includes(q) ||
+        tool.category.toLowerCase().includes(q)
+      );
+    });
+  }, [selectedCategory, searchQuery]);
+
+  const quickTools = useMemo(
+    () => QUICK_TOOL_IDS.map((id) => TOOLS.find((tool) => tool.id === id)).filter(Boolean) as ToolDef[],
+    [],
+  );
+
   return (
-    <div className="min-h-screen bg-canvas text-textbright">
-      {/* ── Nav ─────────────────────────────────────────────── */}
+    <div className="min-h-screen bg-[#f5f5f5] text-[#171717] selection:bg-[#e5e5e5] selection:text-[#171717]">
       <MobileNav />
 
-      {/* ── Hero ────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
-        {/* animated aurora + dot grid */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-[620px] overflow-hidden hidden sm:block">
-          <div className="dot-grid absolute inset-0" />
-          <span className="aurora-blob aurora-a" />
-          <span className="aurora-blob aurora-b" />
-          <span className="aurora-blob aurora-c" />
-        </div>
-        <div className="relative mx-auto flex max-w-6xl flex-col items-center px-4 pb-16 pt-16 text-center sm:px-6 sm:pb-28 sm:pt-24">
-          <span
-            className="animate-fadeup flex items-center gap-2 rounded-full border border-accent/25 bg-accent/[0.08] px-3.5 py-1.5 text-xs font-medium text-accent backdrop-blur"
-            style={{ animationDelay: "0ms" }}
-          >
-            <span className="animate-pixopulse h-1.5 w-1.5 rounded-full bg-accent" />
-            Now in your browser — nothing to install
-          </span>
-          <h1
-            className="animate-fadeup mt-6 max-w-[820px] text-balance text-[2rem] font-bold leading-[1.08] tracking-tight sm:text-[60px]"
-            style={{ animationDelay: "70ms" }}
-          >
-            <span className="text-gradient">Professional image editing,</span>
-            <br className="hidden sm:block" />
-            <span className="text-gradient"> right in your browser</span>
-          </h1>
-          <p
-            className="animate-fadeup mt-5 max-w-[620px] text-pretty text-[15px] leading-relaxed text-text2 sm:text-[17px]"
-            style={{ animationDelay: "140ms" }}
-          >
-            Remove backgrounds, retouch, crop, and export in seconds. Pixo runs entirely in your
-            browser — your images never leave your machine.
-          </p>
-          <div
-            className="animate-fadeup mt-8 flex flex-wrap items-center justify-center gap-3"
-            style={{ animationDelay: "210ms" }}
-          >
-            <Link
-              href="/editor"
-              className="glow-accent inline-flex h-11 items-center rounded-lg bg-accent px-6 text-[15px] font-semibold text-canvas transition hover:-translate-y-0.5 hover:brightness-110"
-            >
-              Start editing — it&apos;s free
-            </Link>
-            <a
-              href="#how"
-              className="inline-flex h-11 items-center rounded-lg border border-border bg-surface/80 px-6 text-[15px] font-medium text-textbright backdrop-blur transition hover:-translate-y-0.5 hover:border-border2 hover:bg-surface2"
-            >
-              See how it works
-            </a>
-          </div>
-          <span
-            className="animate-fadeup mt-4 text-xs text-textmuted"
-            style={{ animationDelay: "280ms" }}
-          >
-            No account needed · JPG, PNG, WebP
-          </span>
-
-          {/* Editor preview mock */}
-          <div
-            className="animate-fadeup relative mt-14 w-full max-w-[1060px]"
-            style={{ animationDelay: "360ms" }}
-          >
-            <div
-              className="anim-floaty pointer-events-none absolute inset-x-0 sm:-inset-x-10 -top-8 bottom-0 rounded-[40px] opacity-50 blur-3xl"
-              style={{ background: "radial-gradient(closest-side, rgba(76,141,255,0.28), transparent)" }}
+      <main className="mx-auto grid w-full max-w-[1320px] gap-5 px-4 py-5 sm:px-6 lg:grid-cols-[244px_minmax(0,1fr)] lg:py-7">
+        <aside className="hidden self-start rounded-lg border border-[#d4d4d4] bg-[#ffffff] p-3 shadow-[0_12px_30px_rgba(0,0,0,0.06)] lg:sticky lg:top-24 lg:block">
+          <div className="mb-4 flex items-center gap-3 border-b border-[#e5e5e5] pb-3">
+            <Image
+              src="/pixo-logo.png?v=2"
+              alt="Pixo logo"
+              width={42}
+              height={42}
+              unoptimized
+              className="h-10 w-10 object-contain grayscale"
             />
-            <div className="relative w-full overflow-hidden rounded-xl border border-border shadow-[0_-1px_0_rgba(255,255,255,0.04),0_24px_80px_rgba(0,0,0,0.6)]">
-          {/* window top bar */}
-          <div className="flex h-9 items-center gap-2.5 border-b border-border bg-surface px-3.5">
-            <div className="flex gap-1.5">
-              <span className="h-2.5 w-2.5 rounded-full bg-border" />
-              <span className="h-2.5 w-2.5 rounded-full bg-border" />
-              <span className="h-2.5 w-2.5 rounded-full bg-border" />
-            </div>
-            <span className="min-w-0 flex-1 truncate text-xs font-medium text-text2">summer-shoot-04.jpg — Pixo</span>
-            <div className="ml-auto hidden items-center gap-1.5 sm:flex">
-              <span className="h-4 w-7 rounded bg-surface2" />
-              <span className="h-4 w-10 rounded bg-surface2" />
-              <span className="h-4 w-12 rounded-md bg-accent/80" />
+            <div className="min-w-0">
+              <p className="text-sm font-black leading-none text-[#171717]">Pixo</p>
+              <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[#737373]">
+                Local Image Tools
+              </p>
             </div>
           </div>
 
-          {/* body */}
-          <div className="flex h-auto flex-col bg-canvas sm:h-[380px] sm:flex-row">
-            {/* tool rail */}
-            <div className="flex h-11 w-full flex-none flex-row items-center justify-center gap-1 border-b border-border bg-surface py-1.5 sm:h-auto sm:w-12 sm:flex-col sm:justify-start sm:border-b-0 sm:border-r sm:py-3">
-              {(
-                [
-                  ["select", false],
-                  ["crop", false],
-                  ["resize", false],
-                  ["bgremove", false],
-                  ["adjust", true],
-                  ["filters", false],
-                ] as const
-              ).map(([icon, active], i) => (
+          <nav aria-label="Tool categories" className="space-y-1">
+            {CATEGORIES.map((category) => (
+              <button
+                key={category}
+                type="button"
+                onClick={() => setSelectedCategory(category)}
+                className={`flex h-10 w-full items-center justify-between rounded-md px-3 text-left text-sm font-bold transition ${
+                  selectedCategory === category
+                    ? "bg-[#171717] text-[#ffffff]"
+                    : "text-[#525252] hover:bg-[#eeeeee] hover:text-[#171717]"
+                }`}
+              >
+                <span>{category}</span>
                 <span
-                  key={i}
-                  className={
-                    "flex h-7 w-7 items-center justify-center rounded-md " +
-                    (active ? "border border-accent bg-accent/15 text-accent" : "text-text2")
-                  }
+                  className={`rounded-full px-2 py-0.5 text-[11px] ${
+                    selectedCategory === category ? "bg-[#e5e5e5] text-[#171717]" : "bg-[#f5f5f5] text-[#737373]"
+                  }`}
                 >
-                  <Icon name={icon} size={15} />
+                  {categoryCounts[category]}
                 </span>
-              ))}
-            </div>
+              </button>
+            ))}
+          </nav>
 
-            {/* canvas */}
-            <div className="relative flex min-h-[180px] flex-1 items-center justify-center sm:min-h-0">
-              <div
-                className="checkerboard absolute inset-0 opacity-40"
-                style={{ backgroundSize: "16px 16px" }}
-              />
-              <div className="relative h-auto w-full sm:h-[62%] sm:w-[66%]">
-                <div
-                  className="h-full w-full rounded-[2px] shadow-[0_10px_30px_rgba(0,0,0,0.55)]"
-                  style={{
-                    background:
-                      "radial-gradient(ellipse 90% 60% at 70% 20%, rgba(255,214,150,0.6), transparent 60%), radial-gradient(ellipse 70% 50% at 25% 85%, rgba(30,60,45,0.9), transparent 65%), linear-gradient(180deg, #cf9a5e 0%, #a8714d 30%, #5d5a52 55%, #2e3a38 78%, #1c2624 100%)",
-                  }}
-                />
-                <div className="pointer-events-none absolute -inset-px border-[1.5px] border-accent" />
-                {[
-                  "left-0 top-0",
-                  "left-1/2 top-0 -translate-x-1/2",
-                  "right-0 top-0",
-                  "left-0 top-1/2 -translate-y-1/2",
-                  "right-0 top-1/2 -translate-y-1/2",
-                  "left-0 bottom-0",
-                  "left-1/2 bottom-0 -translate-x-1/2",
-                  "right-0 bottom-0",
-                ].map((pos, i) => (
-                  <span
-                    key={i}
-                    className={"absolute h-1.5 w-1.5 rounded-[1px] border border-accent bg-white " + pos}
-                    style={{ margin: "-3px" }}
-                  />
-                ))}
+          <div className="mt-5 rounded-md border border-[#d4d4d4] bg-[#fafafa] p-3">
+            <p className="text-xs font-black uppercase tracking-[0.12em] text-[#525252]">Session</p>
+            <div className="mt-3 space-y-2 text-xs font-semibold text-[#525252]">
+              <div className="flex items-center gap-2">
+                <Icon name="shield" size={14} />
+                <span>Browser local</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Icon name="download" size={14} />
+                <span>Export when ready</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Icon name="lock" size={12} />
+                <span>No account needed</span>
               </div>
             </div>
+          </div>
+        </aside>
 
-            {/* right panel */}
-            <div className="hidden w-[210px] flex-none flex-col gap-3 border-l border-border bg-surface p-3.5 sm:flex">
-              <div className="flex items-center gap-2 border-b border-border pb-2.5">
-                <span className="flex h-5 w-5 items-center justify-center rounded border border-accent/25 bg-accent/10 text-accent">
-                  <Icon name="adjust" size={11} />
-                </span>
-                <span className="text-[11px] font-semibold text-text">Adjustments</span>
+        <section className="min-w-0">
+          <Reveal className="reveal overflow-hidden rounded-lg border border-[#d4d4d4] bg-[#ffffff] shadow-[0_16px_48px_rgba(0,0,0,0.08)]">
+            <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_360px]">
+              <div className="p-5 sm:p-7">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex h-7 items-center rounded-md border border-[#d4d4d4] bg-[#f5f5f5] px-2.5 text-xs font-black uppercase tracking-[0.1em] text-[#404040]">
+                    Private Workspace
+                  </span>
+                  <span className="inline-flex h-7 items-center rounded-md border border-[#d4d4d4] bg-[#f5f5f5] px-2.5 text-xs font-black text-[#404040]">
+                    {TOOLS.length} tools ready
+                  </span>
+                </div>
+
+                <h1 className="mt-5 max-w-[760px] text-[34px] font-black leading-[1.02] tracking-normal text-[#171717] sm:text-[54px]">
+                  Edit images from a tidy local workbench.
+                </h1>
+                <p className="mt-4 max-w-[680px] text-[15px] leading-7 text-[#525252] sm:text-base">
+                  Pick a service, drop a file into its popup, adjust the result, and download the finished image from your browser.
+                </p>
+
+                <div className="mt-6 grid gap-2 sm:grid-cols-2 xl:grid-cols-4">
+                  {quickTools.map((tool) => (
+                    <button
+                      key={tool.id}
+                      type="button"
+                      onClick={() => setActiveTool(tool)}
+                      className="flex min-h-[76px] items-center gap-3 rounded-md border border-[#d4d4d4] bg-[#fafafa] p-3 text-left transition hover:-translate-y-0.5 hover:border-[#a3a3a3] hover:bg-[#eeeeee] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#171717]"
+                    >
+                      <span className="flex h-10 w-10 flex-none items-center justify-center rounded-md bg-[#171717] text-[#e5e5e5]">
+                        <Icon name={tool.icon} size={18} />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block text-[13px] font-black leading-tight text-[#171717]">{tool.label}</span>
+                        <span className="mt-1 block text-xs font-semibold text-[#737373]">Open popup</span>
+                      </span>
+                    </button>
+                  ))}
+                </div>
               </div>
-              {(
-                [
-                  ["Brightness", 62, "+6"],
-                  ["Contrast", 74, "+12"],
-                  ["Saturation", 40, "−4"],
-                  ["Temperature", 68, "+8"],
-                ] as const
-              ).map(([label, pct, val]) => (
-                <div key={label} className="flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-medium text-textlabel">{label}</span>
-                    <span className="rounded border border-border bg-surface2 px-1 py-px text-[9px] text-text2 tabular-nums">
-                      {val}
+
+              <div className="border-t border-[#d4d4d4] bg-[#eeeeee] p-5 lg:border-l lg:border-t-0">
+                <div className="rounded-lg border border-[#d4d4d4] bg-[#ffffff] p-4">
+                  <div className="mb-4 flex items-center justify-between">
+                    <div className="flex gap-1.5">
+                      <span className="h-2.5 w-2.5 rounded-full bg-[#525252]" />
+                      <span className="h-2.5 w-2.5 rounded-full bg-[#a3a3a3]" />
+                      <span className="h-2.5 w-2.5 rounded-full bg-[#737373]" />
+                    </div>
+                    <span className="text-[11px] font-black uppercase tracking-[0.14em] text-[#737373]">
+                      Output Preview
                     </span>
                   </div>
-                  <div
-                    className="relative h-1 rounded-full"
-                    style={{
-                      background: `linear-gradient(to right, var(--accent) ${pct}%, #2a2f37 ${pct}%)`,
-                    }}
-                  >
-                    <span
-                      className="absolute top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full border border-black/40 bg-white shadow"
-                      style={{ left: `${pct}%`, marginLeft: -5 }}
-                    />
+
+                  <div className="checkerboard flex aspect-[4/3] items-center justify-center overflow-hidden rounded-md border border-[#d4d4d4] bg-[#fafafa]">
+                    <div className="relative h-[72%] w-[72%] overflow-hidden rounded-md border border-[#d4d4d4] bg-[#e5e5e5] shadow-[0_16px_34px_rgba(0,0,0,0.15)]">
+                      <div className="absolute inset-x-0 top-0 h-1/2 bg-[#d4d4d4]" />
+                      <div className="absolute bottom-0 left-0 h-1/2 w-full bg-[#a3a3a3]" />
+                      <div className="absolute left-[18%] top-[22%] h-[58%] w-[64%] rounded-full bg-[#f5f5f5]" />
+                      <div className="absolute left-[30%] top-[33%] h-[34%] w-[40%] rounded-md bg-[#171717]" />
+                    </div>
+                  </div>
+
+                  <div className="mt-4 grid grid-cols-3 gap-2">
+                    {[
+                      ["PNG", "Export"],
+                      ["WebP", "Convert"],
+                      ["JPG", "Compress"],
+                    ].map(([label, text]) => (
+                      <div key={label} className="rounded-md border border-[#d4d4d4] bg-[#fafafa] p-2">
+                        <p className="text-sm font-black text-[#171717]">{label}</p>
+                        <p className="mt-0.5 text-[11px] font-semibold text-[#737373]">{text}</p>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              ))}
-              <div className="mt-auto flex flex-col gap-2">
-                <span className="flex h-7 items-center justify-center gap-1.5 rounded-md border border-border bg-surface2 text-[10px] font-medium text-textbright">
-                  <Icon name="sparkle" size={11} />
-                  Auto-enhance
-                </span>
-                <span className="flex h-8 items-center justify-center gap-1.5 rounded-md bg-accent text-[11px] font-semibold text-canvas">
-                  <Icon name="download" size={12} />
-                  Export
-                </span>
               </div>
             </div>
-          </div>
+          </Reveal>
+
+          <div id="tools" className="mt-5 rounded-lg border border-[#d4d4d4] bg-[#ffffff] p-3 shadow-[0_12px_34px_rgba(0,0,0,0.06)]">
+            <div className="grid gap-3 xl:grid-cols-[1fr_360px]">
+              <div className="flex gap-2 overflow-x-auto pb-1 lg:hidden">
+                {CATEGORIES.map((category) => (
+                  <button
+                    key={category}
+                    type="button"
+                    onClick={() => setSelectedCategory(category)}
+                    className={`h-10 flex-none rounded-md border px-3 text-sm font-black transition ${
+                      selectedCategory === category
+                        ? "border-[#171717] bg-[#171717] text-[#ffffff]"
+                        : "border-[#d4d4d4] bg-[#fafafa] text-[#525252]"
+                    }`}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
+
+              <label className="relative block">
+                <Icon
+                  name="search"
+                  size={15}
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#737373]"
+                />
+                <input
+                  id="tool-search-input"
+                  type="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search image tools"
+                  className="h-11 w-full rounded-md border border-[#d4d4d4] bg-[#fafafa] py-2 pl-9 pr-3 text-sm font-semibold text-[#171717] outline-none transition placeholder:text-[#737373] focus:border-[#171717] focus:ring-2 focus:ring-[#d4d4d4]"
+                />
+              </label>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* ── Tools grid ──────────────────────────────────────── */}
-      <section id="features" className="border-t border-[#1c2026]">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-[72px]">
-          <Reveal className="reveal max-w-[560px]">
-            <h2 className="text-[26px] font-bold leading-tight tracking-tight text-text sm:text-[32px]">
-              Every tool you reach for daily
-            </h2>
-            <p className="mt-2.5 text-[15px] leading-relaxed text-text2">
-              Fast, non-destructive, and full resolution — always free, no account needed.
-            </p>
-          </Reveal>
-          <Reveal className="reveal-stagger mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {TOOLS.filter((t) => t.id !== "select").map((tool) => (
-              <div
-                key={tool.id}
-                className="group flex flex-col gap-3 rounded-xl border border-border bg-surface p-6 transition duration-200 hover:-translate-y-1 hover:border-accent/40 hover:shadow-[0_12px_40px_rgba(0,0,0,0.45)]"
-              >
-                <span className="flex h-[38px] w-[38px] items-center justify-center rounded-[9px] border border-accent/20 bg-accent/10 text-accent transition group-hover:shadow-[0_0_20px_rgba(76,141,255,0.35)]">
-                  <Icon name={tool.icon} size={18} />
-                </span>
-                <span className="text-[15px] font-semibold text-text">{tool.label}</span>
-                <span className="text-[13px] leading-relaxed text-text2">{tool.blurb}</span>
-              </div>
-            ))}
-          </Reveal>
-        </div>
-      </section>
+          <Reveal className="reveal-stagger mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {filteredTools.map((tool) => {
+              const tone = getToolTone(tool);
+              return (
+                <button
+                  key={tool.id}
+                  type="button"
+                  onClick={() => setActiveTool(tool)}
+                  className={`group flex min-h-[210px] flex-col rounded-lg border p-5 text-left shadow-[0_10px_24px_rgba(24,33,27,0.05)] transition hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#171717] ${tone.card}`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <span className={`flex h-11 w-11 items-center justify-center rounded-md border ${tone.icon}`}>
+                      <Icon name={tool.icon} size={20} />
+                    </span>
+                    <span className={`rounded-md px-2 py-1 text-[10px] font-black uppercase tracking-[0.12em] ${tone.tag}`}>
+                      {tool.status}
+                    </span>
+                  </div>
 
-      {/* ── How it works ────────────────────────────────────── */}
-      <section id="how" className="border-t border-[#1c2026]">
-        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-[72px]">
-          <Reveal className="reveal">
-            <h2 className="text-[26px] font-bold leading-tight tracking-tight text-text sm:text-[32px]">
-              Private by design
-            </h2>
-          </Reveal>
-          <Reveal className="reveal-stagger mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {[
-              {
-                icon: "import" as const,
-                title: "1 · Open an image",
-                desc: "Drag & drop or browse. Nothing uploads — the file opens directly in your browser.",
-              },
-              {
-                icon: "sparkle" as const,
-                title: "2 · Edit instantly",
-                desc: "Background removal and every other tool run locally in your browser — no uploads, no waiting. Your photo never leaves your machine.",
-              },
-              {
-                icon: "download" as const,
-                title: "3 · Export",
-                desc: "Download as PNG, JPG, or WebP at any quality — exactly what you saw on the canvas.",
-              },
-            ].map((step) => (
-              <div
-                key={step.title}
-                className="flex flex-col gap-3 rounded-xl border border-border bg-surface p-6 transition duration-200 hover:-translate-y-1 hover:border-accent/40"
-              >
-                <span className="flex h-[38px] w-[38px] items-center justify-center rounded-[9px] border border-accent/20 bg-accent/10 text-accent">
-                  <Icon name={step.icon} size={16} />
-                </span>
-                <span className="text-[15px] font-semibold text-text">{step.title}</span>
-                <span className="text-[13px] leading-relaxed text-text2">{step.desc}</span>
-              </div>
-            ))}
-          </Reveal>
-        </div>
-      </section>
+                  <div className="mt-5 flex-1">
+                    <h2 className="text-xl font-black leading-tight tracking-normal text-[#171717]">{tool.label}</h2>
+                    <p className="mt-2 text-sm leading-6 text-[#525252]">{tool.blurb}</p>
+                  </div>
 
-      {/* ── CTA footer ──────────────────────────────────────── */}
-      <section className="relative overflow-hidden border-t border-[#1c2026]">
-        <div
-          className="anim-ctaglow pointer-events-none hidden sm:block absolute left-1/2 bottom-[-220px] h-[420px] w-[760px] -translate-x-1/2 rounded-full opacity-50 blur-[110px]"
-          style={{ background: "radial-gradient(closest-side, rgba(76,141,255,0.32), transparent)" }}
-        />
-        <Reveal className="reveal relative mx-auto flex max-w-6xl flex-col items-center px-4 pb-12 pt-14 text-center sm:px-6 sm:pb-14 sm:pt-[72px]">
-          <h2 className="text-gradient text-[28px] font-bold leading-tight tracking-tight sm:text-[34px]">
-            Open an image. Ship it in minutes.
-          </h2>
-          <Link
-            href="/editor"
-            className="glow-accent mt-6 inline-flex h-11 items-center rounded-lg bg-accent px-[26px] text-[15px] font-semibold text-canvas transition hover:-translate-y-0.5 hover:brightness-110"
-          >
-            Start editing free
-          </Link>
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-6 text-xs text-textmuted">
-            <span>Free &amp; private — runs entirely in your browser</span>
-            <span>© 2026 Pixo</span>
-          </div>
-        </Reveal>
-      </section>
+                  <div className="mt-5 flex items-center justify-between border-t border-black/10 pt-4">
+                    <span className="text-xs font-black uppercase tracking-[0.12em] text-[#737373]">{tool.category}</span>
+                    <span className="inline-flex items-center gap-1.5 text-sm font-black text-[#171717]">
+                      Open
+                      <Icon name="chevron-right" size={14} />
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </Reveal>
+
+          {filteredTools.length === 0 && (
+            <div className="mt-5 rounded-lg border border-[#d4d4d4] bg-[#ffffff] p-8 text-center">
+              <p className="text-sm font-bold text-[#525252]">No tools match your search.</p>
+            </div>
+          )}
+        </section>
+      </main>
+
+      <footer id="how" className="mx-auto max-w-[1320px] px-4 pb-8 pt-2 text-xs font-semibold text-[#737373] sm:px-6">
+        <div className="rounded-lg border border-[#d4d4d4] bg-[#ffffff] px-4 py-3">
+          Pixo runs locally in your browser. Open a tool popup, process your file, and export the result when it looks right.
+        </div>
+      </footer>
+
+      <ToolModal key={activeTool?.id ?? "closed"} tool={activeTool} onClose={() => setActiveTool(null)} />
     </div>
   );
 }

@@ -12,7 +12,6 @@ import { SelectPanel } from "./panels/SelectPanel";
 import { CropPanel } from "./panels/CropPanel";
 import { ResizePanel } from "./panels/ResizePanel";
 import { BgRemovePanel } from "./panels/BgRemovePanel";
-import { BgReplacePanel } from "./panels/BgReplacePanel";
 import { ObjectRemoverPanel } from "./panels/ObjectRemoverPanel";
 import { EnhancePanel } from "./panels/EnhancePanel";
 import { FiltersPanel } from "./panels/FiltersPanel";
@@ -24,11 +23,27 @@ const PANELS: Record<ToolId, ComponentType> = {
   crop: CropPanel,
   resize: ResizePanel,
   bgremove: BgRemovePanel,
-  bgreplace: BgReplacePanel,
   object: ObjectRemoverPanel,
   enhance: EnhancePanel,
   filters: FiltersPanel,
-  export: ExportPanel,
+  compress: ExportPanel,
+  watermark: AdjustmentsPanel,
+  convert: ExportPanel,
+  "jpg-to-png": ExportPanel,
+  "png-to-jpg": ExportPanel,
+  "webp-to-png": ExportPanel,
+  "png-to-webp": ExportPanel,
+  "svg-to-png": ExportPanel,
+  "svg-to-jpg": ExportPanel,
+  "pdf-to-word": ExportPanel,
+  "word-to-pdf": ExportPanel,
+  "txt-to-pdf": ExportPanel,
+  "txt-to-word": ExportPanel,
+  "markdown-to-html": ExportPanel,
+  "html-to-pdf": ExportPanel,
+  "json-to-csv": ExportPanel,
+  "csv-to-json": ExportPanel,
+  collage: SelectPanel,
 };
 
 export function RightPanel() {

@@ -122,7 +122,7 @@ export function EditorShell() {
       if (e.key === "+" || e.key === "=") return zoomIn();
       if (e.key === "-" || e.key === "_") return zoomOut();
       if (!hasImage) return;
-      const tool = TOOLS.find((x) => x.key.toLowerCase() === e.key.toLowerCase());
+      const tool = TOOLS.find((x) => x.key?.toLowerCase() === e.key.toLowerCase());
       if (tool) setTool(tool.id);
     };
     window.addEventListener("keydown", onKey);

@@ -41,8 +41,12 @@ export function BgRemovePanel() {
 
   const reset = () => {
     const st = useEditor.getState();
-    const baked = st.bakedImageData();
-    if (baked) st.applyOp(restoreAll(baked));
+    if (st.history.length > 0 && st.history[0]?.base) {
+      const orig = st.history[0].base;
+      st.applyOp(new ImageData(new Uint8ClampedArray(orig.data), orig.width, orig.height));
+    } else if (st.base) {
+      st.applyOp(restoreAll(st.base));
+    }
   };
 
   return (
